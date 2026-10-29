@@ -9,7 +9,9 @@ public class HitShop {
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
         do {
+            System.out.println("===============Menu=============");
             printMenu();
+            System.out.println("================================");
             System.out.print("Chọn: ");
         if (!scanner.hasNextInt()) {
                 System.out.println("Lựa chọn không hợp lệ.");
@@ -76,13 +78,11 @@ public class HitShop {
         scanner.close();
     }
     static void printMenu() {
-        System.out.println("===============Menu=============");
         System.out.println("1. Thêm mặt hàng");
         System.out.println("2. Xóa theo số thứ tự");
         System.out.println("3. Xem giỏ");
         System.out.println("4. Xem tổng tiền");
         System.out.println("0. Kết thúc");
-        System.out.println("================================");
     }
     static void addItem(String name, double price, int quantity) {
         names.add(name);
@@ -105,9 +105,7 @@ public class HitShop {
             return;
         }
         for (int i = 0; i < names.size(); i++) {
-            System.out.println((i + 1) + ". Tên: " + names.get(i)
-                    + " | Giá: " + prices.get(i)
-                    + " | SL: " + quantities.get(i));
+            System.out.println((i + 1) + " - Tên: " + names.get(i) + " - Giá: " + prices.get(i) + " - SL: " + quantities.get(i));
         }
     }
     static double calculateTotal() {
