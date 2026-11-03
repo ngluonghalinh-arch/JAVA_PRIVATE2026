@@ -1,10 +1,16 @@
+import model.CartItem;
+import model.Customer;
+import model.Product;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class HitShop {
-    static ArrayList<String> names = new ArrayList<>();
-    static ArrayList<Double> prices = new ArrayList<>();
-    static ArrayList<Integer> quantities = new ArrayList<>();
+    private static final Customer currentCustomer = new Customer("C01", "Linh Nguyễn", "0900000001");
+    private static final List<CartItem> cart = new ArrayList<>();
+    private static final Product p01 = new Product("P01", "Áo thun", 150000, 20);
+    private static final Product p02 = new Product("P02", "Bình nước", 50000, 10);
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
@@ -13,8 +19,8 @@ public class HitShop {
             printMenu();
             System.out.println("================================");
             System.out.print("Chọn: ");
-        if (!scanner.hasNextInt()) {
-                System.out.println("Lựa chọn không hợp lệ.");
+            if (!scanner.hasNextInt()) {
+                System.out.println("Lua chon khong hop le.");
                 scanner.nextLine();
                 continue;
             }
@@ -22,60 +28,39 @@ public class HitShop {
             scanner.nextLine();
             switch (choice) {
                 case 1 -> {
-                    String productName;
-                    do {
-                        System.out.print("Tên mặt hàng: ");
-                        productName = scanner.nextLine().trim();
-                    } while (productName.isEmpty());
-                    double unitPrice;
-                    do {
-                        System.out.print("Đơn giá: ");
-                        while (!scanner.hasNextDouble()) {
-                            System.out.print("Vui lòng nhập số hợp lệ: ");
-                            scanner.next();
-                        }
-                        unitPrice = scanner.nextDouble();
-                    } while (unitPrice <= 0);
-                    int quantity;
-                    do {
-                        System.out.print("Số lượng: ");
-                        while (!scanner.hasNextInt()) {
-                            System.out.print("Vui lòng nhập số nguyên hợp lệ: ");
-                            scanner.next();
-                        }
-                        quantity = scanner.nextInt();
-                    } while (quantity <= 0);
-                    scanner.nextLine();
-                    addItem(productName, unitPrice, quantity);
-                    System.out.println("Thêm mặt hàng thành công!");
+                    System.out.println("Danh sach san pham co san: ");
+                    System.out.println("- " + p01.getId() + ": " + p01.getName());
+                    System.out.println("- " + p02.getId() + ": " + p02.getName());
+                    System.out.println("Nhap ma san pham: ");
+                    String code = scanner.nextLine().trim();
+                    Product selectedProduct = null;
+                    if ("P01".equalsIgnoreCase(code)){
+                        selectedProduct = p01;
+                    } else if ("P02".equalsIgnoreCase(code)) {
+                        selectedProduct = p02;
+                    }else {
+                        System.out.println("Khong tim thay san pham!");
+                        break;
+                    }
+                    System.out.println("Nhap so luong");
+                    int quantity = Integer.parseInt(scanner.nextLine().trim());
+                    addItem(selectedProduct, quantity);
                 }
                 case 2 -> {
-                    System.out.print("Nhập số thứ tự cần xóa: ");
-                    if (scanner.hasNextInt()) {
-                        int stt = scanner.nextInt();
-                        scanner.nextLine();
-                        removeItem(stt - 1);
-                    } else {
-                        System.out.println("Không tìm thấy mặt hàng.");
-                        scanner.nextLine();
-                    }
+                    System.out.print("Nhap so thu tu mat hang can xoa: ");
+                    int displayNumber = Integer.parseInt(scanner.nextLine().trim());
+                    removeItem(displayNumber - 1);
                 }
                 case 3 -> printItems();
-                case 4 -> {
-                    double subtotal = calculateTotal();
-                    double vat = names.isEmpty() ? 0 : subtotal * 0.10;
-                    double shippingFee = names.isEmpty() ? 0 : 20000;
-                    double thanhTien = subtotal + vat + shippingFee;
-                    System.out.printf("Tiền hàng: %,.0f\n", subtotal);
-                    System.out.printf("VAT (10%): %,.0f\n", vat);
-                    System.out.printf("Phí vận chuyển: %,.0f\n", shippingFee);
-                    System.out.printf("Tổng thanh toán: %,.0f\n", thanhTien);
+                case 4 -> System.out.println("Tong tien: " + calculateTotal());
+                case 0 -> {
+                    System.out.println("Da thoat chuong trinh.");
+                    scanner.close();
+                    return;
                 }
-                case 0 -> System.out.println("Kết thúc.");
-                default -> System.out.println("Lựa chọn không hợp lệ.");
+                default -> System.out.println("Lua chon khong hop le.");
             }
         } while (choice != 0);
-        scanner.close();
     }
     static void printMenu() {
         System.out.println("1. Thêm mặt hàng");
@@ -84,34 +69,42 @@ public class HitShop {
         System.out.println("4. Xem tổng tiền");
         System.out.println("0. Kết thúc");
     }
-    static void addItem(String name, double price, int quantity) {
-        names.add(name);
-        prices.add(price);
-        quantities.add(quantity);
-    }
-    static void removeItem(int index) {
-        if (index >= 0 && index < names.size()) {
-            names.remove(index);
-            prices.remove(index);
-            quantities.remove(index);
-            System.out.println("Đã xóa mặt hàng.");
-        } else {
-            System.out.println("Không tìm thấy mặt hàng.");
-        }
-    }
-    static void printItems() {
-        if (names.isEmpty()) {
-            System.out.println("Giỏ hàng rỗng.");
+    static void addItem(Product product, int quantity) {
+        if (product == null) {
+            System.out.println("Khong tim thay san pham.");
             return;
         }
-        for (int i = 0; i < names.size(); i++) {
-            System.out.println((i + 1) + " - Tên: " + names.get(i) + " - Giá: " + prices.get(i) + " - SL: " + quantities.get(i));
+        if (quantity <= 0) {
+            System.out.println("So luong phai lon hon 0.");
+            return;
+        }
+        cart.add(new CartItem(product, quantity));
+        System.out.println("Da them vao gio hang.");
+    }
+    static void removeItem(int index) {
+        if (index < 0 || index >= cart.size()) {
+            System.out.println("Khong tim thay san pham.");
+            return;
+        }
+        cart.remove(index);
+        System.out.println("Da xoa thanh cong.");
+    }
+    static void printItems() {
+        System.out.println("Khách hàng: " + currentCustomer);
+        if (cart.isEmpty()) {
+            System.out.println("Gio hang dang trong.");
+            return;
+        }
+        for (int i = 0; i < cart.size(); i++) {
+            CartItem item = cart.get(i);
+            Product p = item.getProduct();
+            System.out.println((i + 1) + ". " + p.getId() + " | " + p.getName() + " | " + p.getPrice() + " | SL: " + item.getQuantity() + " | Thành tiền: " + item.getTotal());
         }
     }
     static double calculateTotal() {
         double total = 0;
-        for (int i = 0; i < names.size(); i++) {
-            total += prices.get(i) * quantities.get(i);
+        for (CartItem item : cart) {
+            total += item.getTotal();
         }
         return total;
     }
