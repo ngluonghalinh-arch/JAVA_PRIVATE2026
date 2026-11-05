@@ -29,8 +29,8 @@ public class HitShop {
             switch (choice) {
                 case 1 -> {
                     System.out.println("Danh sach san pham co san: ");
-                    System.out.println("- " + p01.getId() + ": " + p01.getName());
-                    System.out.println("- " + p02.getId() + ": " + p02.getName());
+                    System.out.println("- " + p01.getId() + ": " + p01.getName() + " - gia: " + p01.getPrice()) ;
+                    System.out.println("- " + p02.getId() + ": " + p02.getName() + " - gia: " + p02.getPrice());
                     System.out.println("Nhap ma san pham: ");
                     String code = scanner.nextLine().trim();
                     Product selectedProduct = null;
