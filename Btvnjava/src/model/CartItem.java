@@ -5,6 +5,12 @@ public class CartItem {
     private int quantity;
 
     public CartItem(Product product, int quantity) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product khong duoc null!");
+        }
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity phai lon hon 0!");
+        }
         this.product = product;
         this.quantity = quantity;
     }
@@ -13,18 +19,8 @@ public class CartItem {
         return product;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        if (quantity > 0) {
-            this.quantity = quantity;
-        }
     }
 
     public double getTotal(){

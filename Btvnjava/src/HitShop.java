@@ -1,6 +1,8 @@
 import model.CartItem;
 import model.Customer;
 import model.Product;
+import model.Book;
+import model.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ public class HitShop {
     private static final List<CartItem> cart = new ArrayList<>();
     private static final Product p01 = new Product("P01", "Áo thun", 150000, 20);
     private static final Product p02 = new Product("P02", "Bình nước", 50000, 10);
+    private static final Book p03 = new Book("P03", "Java cơ bản", 120000, 5, "An Nguyen");
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int choice = -1;
@@ -53,6 +56,8 @@ public class HitShop {
                 }
                 case 3 -> printItems();
                 case 4 -> System.out.println("Tong tien: " + calculateTotal());
+                case 5 -> testPolymorphism();
+                case 6 -> testOrder();
                 case 0 -> {
                     System.out.println("Da thoat chuong trinh.");
                     scanner.close();
@@ -70,10 +75,12 @@ public class HitShop {
         System.out.println("0. Kết thúc");
     }
     static void addItem(Product product, int quantity) {
+
         if (product == null) {
             System.out.println("Khong tim thay san pham.");
             return;
         }
+
         if (quantity <= 0) {
             System.out.println("So luong phai lon hon 0.");
             return;
@@ -81,6 +88,7 @@ public class HitShop {
         cart.add(new CartItem(product, quantity));
         System.out.println("Da them vao gio hang.");
     }
+
     static void removeItem(int index) {
         if (index < 0 || index >= cart.size()) {
             System.out.println("Khong tim thay san pham.");
@@ -107,5 +115,38 @@ public class HitShop {
             total += item.getTotal();
         }
         return total;
+    }
+    static void testPolymorphism() {
+        List<Product> products = new ArrayList<>();
+        products.add(p01);
+        products.add(p02);
+        products.add(p03);
+        System.out.println("===== DANH SACH MO TA SAN PHAM =====");
+        for (Product product : products) {
+            System.out.println(product.getDescription());
+        }
+    }
+
+    static void testOrder() {
+        Order order = new Order("O01", currentCustomer);
+        for (CartItem item : cart) {
+            order.addItem(item);
+        }
+        System.out.println("========== THONG TIN ORDER ==========");
+        System.out.println("Ma Order: " + order.getId());
+        System.out.println("Khach hang: " + order.getCustomer().getName());
+        if (order.getItems().isEmpty()) {
+            System.out.println("Order dang trong.");
+        } else {
+            for (CartItem item : order.getItems()) {
+                System.out.println(item);
+            }
+        }
+        System.out.println("Tong tien: " + order.getTotal());
+        System.out.println("Trang thai: " + order.getStatus());
+        order.confirm();
+        System.out.println("Sau khi confirm: " + order.getStatus());
+        order.cancel();
+        System.out.println("Sau khi cancel: " + order.getStatus());
     }
 }
