@@ -119,7 +119,6 @@ public class HitShop {
         products.add(p01);
         products.add(p02);
         products.add(p03);
-        System.out.println("===== DANH SACH MO TA SAN PHAM =====");
         for (Product product : products) {
             System.out.println(product.getDescription());
         }
@@ -130,7 +129,6 @@ public class HitShop {
         for (CartItem item : cart) {
             order.addItem(item);
         }
-        System.out.println("========== THONG TIN ORDER ==========");
         System.out.println("Ma Order: " + order.getId());
         System.out.println("Khach hang: " + order.getCustomer().getName());
         if (order.getItems().isEmpty()) {
