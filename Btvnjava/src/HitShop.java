@@ -11,11 +11,11 @@ import java.util.Scanner;
 public class HitShop {
     private static final Customer currentCustomer = new Customer("C01", "Linh Nguyễn", "0900000001");
     private static final List<CartItem> cart = new ArrayList<>();
+    private static final Scanner scanner = new Scanner(System.in);
     private static final Product p01 = new Product("P01", "Áo thun", 150000, 20);
     private static final Product p02 = new Product("P02", "Bình nước", 50000, 10);
     private static final Book p03 = new Book("P03", "Java cơ bản", 120000, 5, "An Nguyen");
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         int choice = -1;
         do {
             System.out.println("===============Menu=============");
@@ -30,25 +30,7 @@ public class HitShop {
             choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
-                case 1 -> {
-                    System.out.println("Danh sach san pham co san: ");
-                    System.out.println("- " + p01.getId() + ": " + p01.getName() + " - gia: " + p01.getPrice()) ;
-                    System.out.println("- " + p02.getId() + ": " + p02.getName() + " - gia: " + p02.getPrice());
-                    System.out.println("Nhap ma san pham: ");
-                    String code = scanner.nextLine().trim();
-                    Product selectedProduct = null;
-                    if ("P01".equalsIgnoreCase(code)){
-                        selectedProduct = p01;
-                    } else if ("P02".equalsIgnoreCase(code)) {
-                        selectedProduct = p02;
-                    }else {
-                        System.out.println("Khong tim thay san pham!");
-                        break;
-                    }
-                    System.out.println("Nhap so luong");
-                    int quantity = Integer.parseInt(scanner.nextLine().trim());
-                    addItem(selectedProduct, quantity);
-                }
+                case 1 -> themSp();
                 case 2 -> {
                     System.out.print("Nhap so thu tu mat hang can xoa: ");
                     int displayNumber = Integer.parseInt(scanner.nextLine().trim());
@@ -67,6 +49,25 @@ public class HitShop {
             }
         } while (choice != 0);
     }
+    static void themSp(){
+        System.out.println("Danh sach san pham co san: ");
+        System.out.println("- " + p01.getId() + ": " + p01.getName() + " - gia: " + p01.getPrice()) ;
+        System.out.println("- " + p02.getId() + ": " + p02.getName() + " - gia: " + p02.getPrice());
+        System.out.println("Nhap ma san pham: ");
+        String code = scanner.nextLine().trim();
+        Product selectedProduct = null;
+        if ("P01".equalsIgnoreCase(code)){
+            selectedProduct = p01;
+        } else if ("P02".equalsIgnoreCase(code)) {
+            selectedProduct = p02;
+        }else {
+            System.out.println("Khong tim thay san pham!");
+            return;
+        }
+        System.out.println("Nhap so luong");
+        int quantity = Integer.parseInt(scanner.nextLine().trim());
+        addItem(selectedProduct, quantity);
+    }
     static void printMenu() {
         System.out.println("1. Thêm mặt hàng");
         System.out.println("2. Xóa theo số thứ tự");
@@ -75,12 +76,10 @@ public class HitShop {
         System.out.println("0. Kết thúc");
     }
     static void addItem(Product product, int quantity) {
-
         if (product == null) {
             System.out.println("Khong tim thay san pham.");
             return;
         }
-
         if (quantity <= 0) {
             System.out.println("So luong phai lon hon 0.");
             return;
@@ -88,7 +87,6 @@ public class HitShop {
         cart.add(new CartItem(product, quantity));
         System.out.println("Da them vao gio hang.");
     }
-
     static void removeItem(int index) {
         if (index < 0 || index >= cart.size()) {
             System.out.println("Khong tim thay san pham.");
