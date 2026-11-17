@@ -1,3 +1,4 @@
+
 package model;
 
 public class Product {
@@ -13,7 +14,7 @@ public class Product {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Name khong hop le!");
         }
-        if (price <= 0) {
+        if (!Double.isFinite(price) || price <= 0) {
             throw new IllegalArgumentException("Price khong hop le!");
         }
         if (stock < 0) {
@@ -37,26 +38,43 @@ public class Product {
         return price;
     }
 
+    public int getStock() {
+        return stock;
+    }
+
     public void setPrice(double price) {
-        if (price <= 0) {
-            throw new IllegalArgumentException("Giá phải lớn hơn 0");
+        if (Double.isFinite(price) && price > 0) {
+            this.price = price;
         }
-        this.price = price;
     }
 
     public void decreaseStock(int quantity) {
-        if (quantity <= 0 || quantity > stock) {
-            throw new IllegalArgumentException("Số lượng không hợp lệ");
+        if (quantity > 0 && quantity <= stock) {
+            stock -= quantity;
         }
-        stock -= quantity;
+    }
+
+    public void increaseStock(int quantity) {
+        if (quantity > 0 && quantity <= Integer.MAX_VALUE - stock) {
+            stock += quantity;
+        }
     }
 
     public String getDescription() {
         return name;
     }
 
+    public double shippingFee(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException(
+                    "Quantity phai lon hon 0!"
+            );
+        }
+        return 0;
+    }
+
     @Override
-    public String toString(){
-        return id + " | " + name + " | " + price + " | tồn: " + stock;
+    public String toString() {
+        return id + " | " + getDescription() + " | Gia: " + price + " | Ton kho: " + stock;
     }
 }

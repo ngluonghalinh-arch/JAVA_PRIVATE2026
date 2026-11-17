@@ -1,22 +1,32 @@
 package model;
 
-public class Book extends Product{
+public class Book extends Product {
     private String author;
 
     public Book(String id, String name, double price, int stock, String author) {
         super(id, name, price, stock);
         if (author == null || author.trim().isEmpty()) {
-            throw new IllegalArgumentException("Author khong hop le!");
+            throw new IllegalArgumentException(
+                    "Author khong hop le!"
+            );
         }
         this.author = author;
     }
 
-    public String getAuthor() {
-        return author;
-    }
+    public String getAuthor() { return author; }
 
     @Override
     public String getDescription() {
         return getName() + " — tác giả: " + author;
+    }
+
+    @Override
+    public double shippingFee(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException(
+                    "Quantity phai lon hon 0!"
+            );
+        }
+        return 5000.0 * quantity;
     }
 }
