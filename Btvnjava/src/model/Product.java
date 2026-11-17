@@ -61,7 +61,7 @@ public class Product {
     }
 
     public String getDescription() {
-        return name;
+        return id + " - " + name + " - Giá: " + price;
     }
 
     public double shippingFee(int quantity) {
@@ -70,7 +70,7 @@ public class Product {
                     "Quantity phai lon hon 0!"
             );
         }
-        return 0;
+        return 10000.0 * quantity;
     }
 
     @Override
